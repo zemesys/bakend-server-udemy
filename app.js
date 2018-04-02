@@ -1,4 +1,4 @@
-// Requires importacion de las librerias que necesitamos 
+// Requires    importacion de las librerias que necesitamos 
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
@@ -17,7 +17,11 @@ app.use(bodyParser.json())
 var appRuotes = require('./routes/app');
 var usuarioRuotes = require('./routes/usuario');
 var loginRuotes = require('./routes/login');
-
+var hospitalRoutes = require('./routes/hospital');
+var medicoRoutes = require('./routes/medico');
+var busquedaRoutes = require('./routes/busqueda');
+var uploadRoutes = require('./routes/upload');
+var imagenesRoutes = require('./routes/imagenes');
 
 // conexion a la base de datos 
 mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', (err, res) => {
@@ -29,12 +33,22 @@ mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', (err, res) =
 
 });
 
+// // Server index config
+// var serveIndex = require('serve-index');
+// app.use(express.static(__dirname + '/'))
+// app.use('/uploads', serveIndex(__dirname + '/uploads'));
 
-// Rutas        aqui dejamos siempre el appRuotes el ultimo
+
+// Rutas        
 app.use('/usuario', usuarioRuotes);
+app.use('/hospital', hospitalRoutes);
+app.use('/medico', medicoRoutes);
+app.use('/busqueda', busquedaRoutes);
+app.use('/upload', uploadRoutes);
 app.use('/login', loginRuotes);
-app.use('/', appRuotes);
+app.use('/imagenes', imagenesRoutes);
 
+app.use('/', appRuotes); // siempre el appRuotes el ultimo
 
 
 

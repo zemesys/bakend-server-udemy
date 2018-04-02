@@ -1,0 +1,44 @@
+// con esta variable requerimos los campos de la tablas usuario que necesitemos todos o uno solo 
+// que se encentra en la ruta mostrada
+var Usuario = require('../models/usuario');
+
+//creamos una funcion llamada subirPorTipo para saber:
+// saber el tipo de archivo  de quien  es   "tipo"
+// el id del usuario que la sube   "id"
+// el nombre de archivo que "nombreArchivo"
+// y hacer un response de la funcion  "res"
+
+function subirPorTipo(tipo, id, nombreArchivo, res) {
+
+//primera condicion 
+//si el tipo de archivo es de usuarios  
+
+    if (tipo === 'usuarios') {
+
+// entonces  buscamos el id con el metodo findById 
+// solicitamos el campo  "id"  de usuario y pedimos el siguente cal-back err y usuario  
+
+        Usuario.findById(id, (err, usuario) => {
+
+// declaramos la variable pathViejo para saber si existe el archivo en la ruta selecionada en el campo img de la tabla usuario
+            var pathViejo = './uploads/usuarios/' + usuario.img;
+
+            // si existe elemina la imagen anterior
+            if (fs.existsSync(pathViejo)) {
+                fs.unlink(pathViejo);
+            }
+
+//  
+            usuario.img = nombreArchivo;
+
+            usuario.save((err, usuarioActualizado) => {
+
+                return res.status(200).json({
+                    ok: true,
+                    mensaje: 'Imagen de Usuario Actualizada',
+                    usuario: usuarioActualizado
+                });
+
+            })
+
+        });
